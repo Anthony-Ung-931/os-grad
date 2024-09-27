@@ -16,6 +16,8 @@ INT 10h
 mov bp, 0x9000			; Task 4: Set up the stack
 mov sp, bp
 
+call disk_test			; Task 5: Call disk_test
+
 jmp $				; Infinite loop
 
 ; data
@@ -24,6 +26,9 @@ DRIVE_NUM	db 0		; Task 3: Inspect the value printed.
 				; Should be 0x80
 
 hello_world db 'Hello World', 0
+
+disk_test:
+	pusha			; Task 6: Push all registers onto the stack
 
 ; Pad file with zeroes
 times 510-($-$$) db 0	
