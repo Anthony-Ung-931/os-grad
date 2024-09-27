@@ -1,4 +1,5 @@
 bits 16
+org 0x7c00
 
 mov AH, 0x0e		; Teletype screen
 mov AL, 0x58		; Put the letter 'x'
