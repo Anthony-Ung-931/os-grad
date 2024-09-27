@@ -5,10 +5,19 @@
 mov AH, 0x0e			; Teletype screen
 mov AL, 0x58			; Put the letter 'x'
 INT 10h
+
+mov AL, 0x0a
+INT 10h
+
+mov [DRIVE_NUM], DL
+mov AL, [DRIVE_NUM]
+INT 10h
 jmp $				; Infinite loop
 
 ; data
 KERN_ADDRESS 	dw 0x1000	; Task 2: Store kernel address
+DRIVE_NUM	db 0		; Task 3: Inspect the value printed.
+				; Should be 0x80
 
 hello_world db 'Hello World', 0
 
