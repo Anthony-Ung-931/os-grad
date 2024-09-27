@@ -1,7 +1,0 @@
-ubuntu-dios@ubuntu-dios-VMware-Virtual-Platform:~/Desktop/os_wksp$ qemu-system-i386 bl
-WARNING: Image format was not specified for 'bl' and probing guessed raw.
-         Automatically detecting the format is dangerous for raw images, write operations on block 0 will be restricted.
-         Specify the 'raw' format explicitly to remove the restrictions.
-ubuntu-dios@ubuntu-dios-VMware-Virtual-Platform:~/Desktop/os_wksp$ qemu-system-i386 -drive format=raw,file=bl
-ubuntu-dios@ubuntu-dios-VMware-Virtual-Platform:~/Desktop/os_wksp$ 
-
