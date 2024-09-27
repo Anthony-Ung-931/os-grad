@@ -12,6 +12,10 @@ INT 10h
 mov [DRIVE_NUM], DL
 mov AL, [DRIVE_NUM]
 INT 10h
+
+mov bp, 0x9000			; Task 4: Set up the stack
+mov sp, bp
+
 jmp $				; Infinite loop
 
 ; data
