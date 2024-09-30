@@ -1,30 +1,13 @@
 [bits 16]
-[org 0x7c00]			; Task 1: Set 16-bit mode and origin.
+[org 0x7c00]
 
 ; Entry point
 main:
-	mov AH, 0x0e			; Teletype screen
-	mov AL, 0x58
-	INT 10h
+	mov bp, 0x9000
+	mov sp, bp
 
-	call new_line
-
-	mov [DRIVE_NUM], DL
-	mov AL, [DRIVE_NUM]
-	INT 10h
-
-	call new_line	
-
-	mov BX, hello_world
-	call print_string
-
-	call new_line
-
-	mov BP, 0x9000			; Task 4: Set up the stack
-	mov SP, BP
-
-	call disk_test			; Task 5: Call disk_test
-
+	call disk_test
+	call test_success
 	call idle_permanently
 
 
@@ -45,40 +28,60 @@ disk_test:
 	
 	jc ERROR_disk_test	; Task 9: Query interrupt flag.
 				; If carry flag set, display error.
-disk_test_sectors:
+    disk_test_sectors:
 	cmp AL, NUM_SECTORS	; Task 10: Check number of sectors read
 	jne ERROR_disk_bad_read
 
 	popa			; Task 11: Pop all registers and return
 	ret
 
+
+test_success:
+	pusha
+	mov AL, [BL_LAST_BYTE]
+	cmp AL, 0xaa
+	jne ERROR_disk_read_failed
+	mov bx, disk_read_success
+	call print_string
+	popa
+	ret
+	
+
 ERROR_disk_test:
-				; Task 9: Print error message 
-				; 		if disk read failed
 	mov bx, err_msg_disk_fail 
+	call ERROR_EXIT
+
+
+ERROR_disk_bad_read:
+	mov bx, err_msg_disk_bad_read
+	call ERROR_EXIT
+
+
+ERROR_disk_read_failed:
+	mov bx, err_msg_disk_read_failed
+	call ERROR_EXIT
+
+
+ERROR_EXIT:
 	call print_string
 	call new_line
 	call idle_permanently
 
-ERROR_disk_bad_read:
-	mov bx, err_msg_disk_bad_read 
-	call print_string
-	call new_line
-	call idle_permanently
 
 print_string:
 	pusha
 	mov AH, 0x0e
-print_string_lp:
+    print_string_lp:
 	mov AL, [BX]
 	cmp AL, 0
 	je print_done
 	INT 10h
 	add BX, 1		; Increment BX
 	jmp print_string_lp
-print_done:
+    print_done:
 	popa
 	ret
+
 
 new_line:
 	mov AH, 0x0e
@@ -90,18 +93,23 @@ new_line:
 
 	ret
 
+
 idle_permanently:
 	jmp $			; Infinite Loop
+
 
 ; data
 KERNEL_ADDRESS 	equ 0x1000	; Task 2: Store kernel address
 DRIVE_NUM	equ 0		; Task 3: Inspect the value printed.
 				; Should be 0x80
-NUM_SECTORS 	equ 0x01
+NUM_SECTORS 	equ 0x1
+BL_LAST_BYTE	equ 0x7dff
 
 hello_world db 'Hello World', 0
 err_msg_disk_fail db 'ERROR: Disk cannot be read.', 0
 err_msg_disk_bad_read db 'ERROR: Disk can be read but the number of sectors is wrong', 0
+err_msg_disk_read_failed db 'ERROR: Different data appears than what is expected.',0
+disk_read_success db 'Disk read success!', 0
 
 ; Pad file with zeroes
 times 510-($-$$) db 0	
