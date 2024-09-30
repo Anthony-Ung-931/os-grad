@@ -25,7 +25,7 @@ main:
 
 	call disk_test			; Task 5: Call disk_test
 
-	jmp $				; Infinite loop
+	call idle_permanently
 
 new_line:
 	mov AH, 0x0e
@@ -66,6 +66,9 @@ print_string_lp:
 print_done:
 	popa
 	ret
+
+idle_permanently:
+	jmp $			; Infinite Loop
 
 ; data
 KERNEL_ADDRESS 	dw 0x1000	; Task 2: Store kernel address
