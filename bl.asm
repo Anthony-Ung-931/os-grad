@@ -3,6 +3,23 @@
 
 ; Entry point
 main:
+	mov AH, 0x0e			; Teletype screen
+	mov AL, 0x58
+	INT 10h
+
+	call new_line
+
+	mov [DRIVE_NUM], DL
+	mov AL, [DRIVE_NUM]
+	INT 10h
+
+	call new_line	
+
+	mov BX, hello_world
+	call print_string
+
+	call new_line
+
 	mov bp, 0x9000
 	mov sp, bp
 
