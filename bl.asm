@@ -5,9 +5,6 @@
 main:
 	mov [DRIVE_NUM], DL
 	mov AL, [DRIVE_NUM]
-	INT 10h
-
-	call new_line	
 
 	mov BX, hello_world
 	call print_string
