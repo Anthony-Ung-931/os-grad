@@ -106,7 +106,7 @@ KERNEL_ADDRESS 	equ 0x1000	; Task 2: Store kernel address
 DRIVE_NUM	equ 0		; Task 3: Inspect the value printed.
 				; Should be 0x80
 NUM_SECTORS 	equ 0x1
-BL_LAST_BYTE	equ 0x7dff
+BL_LAST_BYTE	equ 0x11ff
 
 hello_world db 'Hello World', 0
 err_msg_disk_fail db 'ERROR: Disk cannot be read.', 0
