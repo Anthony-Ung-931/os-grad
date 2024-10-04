@@ -1,10 +1,14 @@
 [bits 16]
 [org 0x7c00]
 
+KERNEL_ADDRESS 	equ 0x1000	; Task 2: Store kernel address
+NUM_SECTORS 	equ 0x1
+BL_LAST_BYTE	equ 0x11ff
+
+
 ; Entry point
 main:
-	mov [DRIVE_NUM], DL
-	mov AL, [DRIVE_NUM]
+	mov [boot_drive], DL
 
 	mov bp, 0x9000
 	mov sp, bp
@@ -25,7 +29,7 @@ disk_test:
 				; 	Sector 1 contains the bootloader
 				;	Sectors 2+ contain the kernel
 	mov DH, 0x00		; DH - Head 0
-	mov DL, [DRIVE_NUM]	; DL - Drive
+	mov DL, [boot_drive]	; DL - Drive
 
 	INT 13h			; Task 8: Call Interrupt
 	
@@ -33,7 +37,7 @@ disk_test:
 				; If carry flag set, display error.
     disk_test_sectors:
 	cmp AL, NUM_SECTORS	; Task 10: Check number of sectors read
-	jne ERROR_disk_bad_read
+	jne ERROR_disk_sector_error
 
 	popa			; Task 11: Pop all registers and return
 	ret
@@ -55,8 +59,8 @@ ERROR_disk_test:
 	call ERROR_EXIT
 
 
-ERROR_disk_bad_read:
-	mov bx, err_msg_disk_bad_read
+ERROR_disk_sector_error:
+	mov bx, err_msg_disk_sector_error
 	call ERROR_EXIT
 
 
@@ -102,15 +106,11 @@ idle_permanently:
 
 
 ; data
-KERNEL_ADDRESS 	equ 0x1000	; Task 2: Store kernel address
-DRIVE_NUM	equ 0		; Task 3: Inspect the value printed.
-				; Should be 0x80
-NUM_SECTORS 	equ 0x1
-BL_LAST_BYTE	equ 0x11ff
+boot_drive	db 0
 
 hello_world db 'Hello World', 0
 err_msg_disk_fail db 'ERROR: Disk cannot be read.', 0
-err_msg_disk_bad_read db 'ERROR: Disk can be read but the number of sectors is wrong', 0
+err_msg_disk_sector_error db 'ERROR: Disk can be read but the number of sectors is wrong', 0
 err_msg_disk_read_failed db 'ERROR: Different data appears than what is expected.',0
 disk_read_success db 'Disk read success!', 0
 
