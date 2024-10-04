@@ -16,6 +16,8 @@ main:
 
 	call disk_test
 	call test_success
+	call load_gdt
+
 	call _HALT
 
 
@@ -104,6 +106,29 @@ new_line:
 
 _HALT:
 	jmp $			; Infinite Loop
+
+
+load_gdt:
+	cli
+	lgdt [gdt_descriptor]
+	mov eax, cr0
+	or eax, 01
+	mov cr0, eax
+	jmp CODE_SEGMENT_INDEX:begin_32_bit_mode
+
+[bits 32]
+begin_32_bit_mode:
+	mov ax, DATA_SEGMENT_INDEX
+	mov ds, ax
+	mov ss, ax
+	mov es, ax
+	mov fs, ax
+	mov gs, ax
+
+	mov ebp, 0x90000
+	mov esp, ebp
+
+	call _HALT
 
 
 CODE_SEGMENT_INDEX equ gdt_code_segment - gdt_start_segment
