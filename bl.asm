@@ -11,12 +11,12 @@ BL_LAST_BYTE	equ 0x11ff
 main:
 	mov [boot_drive], DL
 
-	mov bp, 0x9000
-	mov sp, bp
+	mov BP, 0x9000
+	mov SP, BP
 
 	call disk_test
 	call test_success
-	call idle_permanently
+	call _HALT
 
 
 disk_test:
@@ -73,7 +73,7 @@ ERROR_disk_read_failed:
 ERROR_EXIT:
 	call print_string
 	call new_line
-	call idle_permanently
+	call _HALT
 
 
 print_string:
@@ -102,12 +102,42 @@ new_line:
 	ret
 
 
-idle_permanently:
+_HALT:
 	jmp $			; Infinite Loop
+
+
+CODE_SEGMENT_INDEX equ gdt_code_segment - gdt_start_segment
+DATA_SEGMENT_INDEX equ gdt_data_segment - gdt_start_segment
 
 
 ; data
 boot_drive	db 0
+
+gdt_start_segment:
+	dq 0x0
+
+gdt_code_segment:
+	dw 0xffff
+	dw 0x0000
+	db 0x00
+	db 0x9a
+	db 0xcf
+	db 0x00
+
+gdt_data_segment:
+	dw 0xffff
+	dw 0x0000
+	db 0x00
+	db 0x92
+	db 0xcf
+	db 0x00
+
+gdt_end:
+
+gdt_descriptor:
+	dw gdt_end - gdt_start_segment - 1
+	dd gdt_start_segment
+
 
 hello_world db 'Hello World', 0
 err_msg_disk_fail db 'ERROR: Disk cannot be read.', 0
