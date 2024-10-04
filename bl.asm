@@ -1,7 +1,8 @@
 [bits 16]
 [org 0x7c00]
 
-KERNEL_ADDRESS 	equ 0x1000	; Task 2: Store kernel address
+
+KERNEL_ADDRESS 	equ 0x1000	
 NUM_SECTORS 	equ 0x1
 BL_LAST_BYTE	equ 0x11ff
 
@@ -19,27 +20,27 @@ main:
 
 
 disk_test:
-	pusha			; Task 6: Push all registers onto the stack
-				; Task 7: Set up registers properly
-	mov AH, 0x02		; 0x02: Mode - Read sectors
-	mov AL, NUM_SECTORS	; Number of sectors
-	mov BX, KERNEL_ADDRESS	; BX - Offset
-	mov CH, 0x00		; CH - Cylinder 0
-	mov CL, 0x01		; CL - Sector 1
-				; 	Sector 1 contains the bootloader
-				;	Sectors 2+ contain the kernel
-	mov DH, 0x00		; DH - Head 0
-	mov DL, [boot_drive]	; DL - Drive
+	pusha			
+				
+	mov AH, 0x02		; READ mode
+	mov AL, NUM_SECTORS	
+	mov BX, KERNEL_ADDRESS	
 
-	INT 13h			; Task 8: Call Interrupt
+	mov CH, 0x00		; CHS = 0-1-0		
+	mov CL, 0x01						
+	mov DH, 0x00
+		
+	mov DL, [boot_drive]	
+
+	INT 13h			
 	
-	jc ERROR_disk_test	; Task 9: Query interrupt flag.
-				; If carry flag set, display error.
+	jc ERROR_disk_test
+				
     disk_test_sectors:
-	cmp AL, NUM_SECTORS	; Task 10: Check number of sectors read
+	cmp AL, NUM_SECTORS	
 	jne ERROR_disk_sector_error
 
-	popa			; Task 11: Pop all registers and return
+	popa	
 	ret
 
 
