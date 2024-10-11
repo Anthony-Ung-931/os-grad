@@ -3,7 +3,7 @@
 
 
 KERNEL_ADDRESS 	equ 0x1000	
-NUM_SECTORS 	equ 0x1
+NUM_SECTORS 	equ 0x9
 BL_LAST_BYTE	equ 0x11ff
 
 
@@ -15,10 +15,7 @@ main:
 	mov SP, BP
 
 	call disk_test
-	call test_success
 	call load_gdt
-
-	call _HALT
 
 
 disk_test:
@@ -45,17 +42,6 @@ disk_test:
 	popa	
 	ret
 
-
-test_success:
-	pusha
-	mov AL, [BL_LAST_BYTE]
-	cmp AL, 0xaa
-	jne ERROR_disk_read_failed
-	mov bx, disk_read_success
-	call print_string
-	popa
-	ret
-	
 
 ERROR_disk_test:
 	mov bx, err_msg_disk_fail 
@@ -127,14 +113,8 @@ begin_32_bit_mode:
 
 	mov ebp, 0x90000
 	mov esp, ebp
-	
-	mov byte [0xb8000], 0x41
-	mov byte [0xb8002], 0x6e
-	mov byte [0xb8004], 0x74
 
-	mov byte [0xb8001], 0xb0
-	mov byte [0xb8003], 0xf0
-	mov byte [0xb8005], 0xc0
+	jmp KERNEL_ADDRESS 
 	
 	call _HALT
 

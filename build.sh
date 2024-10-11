@@ -1,7 +1,7 @@
 #!/bin/bash
 
-rm bl
+rm boot.bin
 
-nasm bl.asm
+nasm boot.asm
 
-qemu-system-i386 -drive format=raw,file=bl
+qemu-system-i386 -drive format=raw,file=boot
