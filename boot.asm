@@ -26,7 +26,7 @@ disk_test:
 	mov BX, KERNEL_ADDRESS	
 
 	mov CH, 0x00		; CHS = 0-1-0		
-	mov CL, 0x01						
+	mov CL, 0x02						
 	mov DH, 0x00
 		
 	mov DL, [boot_drive]	
