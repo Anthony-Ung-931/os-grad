@@ -12,4 +12,9 @@ int main() {
 		offset += 1;
 	}
 
+	for(; offset < 80 * 25; offset += 1) {
+		VGA_BUFFER[2 * offset] = ' ';
+		
+	}
+
 }
