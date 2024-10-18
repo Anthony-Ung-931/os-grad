@@ -3,7 +3,7 @@
 
 
 KERNEL_ADDRESS 	equ 0x1000	
-NUM_SECTORS 	equ 0x9
+NUM_SECTORS 	equ 0x11
 BL_LAST_BYTE	equ 0x11ff
 
 
