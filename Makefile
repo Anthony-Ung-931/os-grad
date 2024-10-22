@@ -1,4 +1,4 @@
-C_FILES=./kernel.c ./console/console.c
+C_FILES=./kernel.c ./console/console.c ./tests/tests.c
 O_FILES=${C_FILES:.c=.o}
 
 all: qemu_launch
@@ -23,3 +23,5 @@ ${O_FILES}:
 
 clean:
 	find . -name \*.o | xargs --no-run-if-empty rm
+	find . -name \*.bin | xargs --no-run-if-empty rm
+

@@ -16,21 +16,42 @@ const int8_t DEFAULT_STYLE = 0x07;
 static int terminal_pos = 0;
 static int style = DEFAULT_STYLE;
 
+
+void print_character(char c);
+void clear_terminal();
+void print_string(char* str);
+void print_line(char* str);
+
+
 void print_character(char c) {
 	struct character* pos = (struct character*)(VGA_START + terminal_pos);
 	
-	pos->character = (int8_t) c;
-	pos->style = DEFAULT_STYLE;
-	
-	terminal_pos++;
+	if(c != '\n') {
+		pos->character = (int8_t) c;
+		pos->style = DEFAULT_STYLE;
+		terminal_pos++;
+	}
+	else if(c == '\n') {
+		terminal_pos /= 80;
+		terminal_pos += 1;
+		terminal_pos *= 80;
+	}
+
+	if(terminal_pos < 0 || terminal_pos >= VGA_WIDTH * VGA_HEIGHT) {
+		clear_terminal();
+		terminal_pos = 0;
+	}
 }
 
-void clear_terminal() {	
+void clear_terminal() {
+	struct character* pos = (struct character*)(VGA_START);
+	
 	int i = 0;
 	for(; i < VGA_WIDTH * VGA_HEIGHT; i++) {
-		print_character((char) DEFAULT_CHARACTER);
+		pos = (struct character*)(VGA_START+i);
+		pos->character = DEFAULT_CHARACTER;
+		pos->style = DEFAULT_STYLE;
 	}
-	terminal_pos = 0;
 }
 
 void print_string(char* str) {
@@ -42,5 +63,6 @@ void print_string(char* str) {
 }
 
 void print_line(char* str) {
-
+	print_string(str);
+	print_character('\n');
 }
