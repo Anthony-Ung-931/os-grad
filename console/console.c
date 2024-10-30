@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include "console.h"
 
 struct character {
 	int8_t character;
@@ -11,10 +12,12 @@ const int VGA_HEIGHT = 25;
 static struct character* const VGA_START = (struct character*)0xb8000;
 
 const int8_t DEFAULT_CHARACTER = 0x20;
-const int8_t DEFAULT_STYLE = 0x07;
+const int8_t DEFAULT_STYLE = GRAY;
 
 static int terminal_pos = 0;
 static int style = DEFAULT_STYLE;
+const VGA_Color terminal_font_color = GRAY;
+const VGA_Color terminal_background_color = BLACK;
 
 
 void print_character(char c);
