@@ -7,6 +7,8 @@
 int test_print_overflow_flag = 0;
 
 int main() {
+	set_terminal_font_color(CYAN);
+	
 	char* hello = "Hello World";
 	char* test_str = "Called after print_line()";
 
