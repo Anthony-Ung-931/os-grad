@@ -22,10 +22,8 @@ void test_preliminary_colors() {
 	print_string(test_str);
 
 	print_character('\n');
+	
+	set_terminal_background_color(WHITE);
 
 	print_string(evil_string);
-
-	if(test_print_overflow_flag) {
-		test_print_overflow();
-	}
 }

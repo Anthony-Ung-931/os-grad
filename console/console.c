@@ -70,7 +70,7 @@ void print_character_with_color(char c, VGA_Color color) {
 	
 	if(c != '\n') {
 		pos->character = (int8_t) c;
-		pos->style = (terminal_background_color >> 4) | color;
+		pos->style = (terminal_background_color << 4) | color;
 		terminal_pos++;
 	}
 	else if(c == '\n') {
