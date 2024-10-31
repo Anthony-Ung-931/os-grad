@@ -85,3 +85,17 @@ void print_character_with_color(char c, VGA_Color color) {
 	}
 	
 }
+
+void print_string_with_color(char* str, VGA_Color color) {
+	int i = 0;
+	while(str[i] != '\0') {
+		print_character_with_color(str[i], color);
+		i++;
+	}
+	
+}
+
+void print_line_with_color(char* str, VGA_Color color) {
+	print_string_with_color(str, color);
+	print_character('\n');
+}
