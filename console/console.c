@@ -44,6 +44,32 @@ void clear_terminal() {
 	}
 }
 
+/**
+ * McKee says it is OK for now if I simply shift up and have the first line
+ * be perminantly lost.
+ */
+void shift_up() {
+	struct character* current_pos = (struct character*)(VGA_START);
+	struct character* old_pos = (struct character*)(VGA_START);
+
+	int i = 0;
+	for(; i < VGA_WIDTH * (VGA_HEIGHT - 1); i++) {
+		current_pos = (struct character*)(VGA_START+i);
+		old_pos = (struct character*)(VGA_START+VGA_WIDTH+i);
+
+		current_pos->character = old_pos->character;
+		current_pos->style = old_pos->style;
+	}
+	for(; i < VGA_WIDTH * VGA_HEIGHT; i++) {
+		current_pos = (struct character*)(VGA_START+i);
+		current_pos->character = DEFAULT_CHARACTER;
+		current_pos->style = DEFAULT_STYLE;
+	}
+
+	terminal_pos = VGA_WIDTH * (VGA_HEIGHT - 1);
+}
+
+
 void print_string(char* str) {
 	int i = 0;
 	while(str[i] != '\0') {
@@ -79,11 +105,18 @@ void print_character_with_color(char c, VGA_Color color) {
 		terminal_pos *= 80;
 	}
 
-	if(terminal_pos < 0 || terminal_pos >= VGA_WIDTH * VGA_HEIGHT) {
+	/**
+	 *	McKee says it is OK if I am checking for out of bounds.
+	 *	He suggests that I shift everything up first and that he is
+	 *		OK if I lose the first line of output.
+	 */
+	if(terminal_pos < 0 || terminal_pos >= VGA_WIDTH * (VGA_HEIGHT + 1)) {
 		clear_terminal();
 		terminal_pos = 0;
 	}
-	
+	else if(terminal_pos >= VGA_WIDTH * VGA_HEIGHT) {
+		shift_up();
+	}
 }
 
 void print_string_with_color(char* str, VGA_Color color) {
