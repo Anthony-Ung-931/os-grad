@@ -10,6 +10,8 @@ const int flag_test_preliminary_colors = 0;
 void run_tests();
 
 int main() {
+	clear_terminal();
+
 	char* str1= " HELLO ";
 	char* str2 = " WORLD ";
 	char* str3 = " TODAY ";
@@ -63,8 +65,9 @@ int main() {
 	print_string_with_color(" BIG STRING", CYAN);
 	print_line_with_color("A new line", BROWN);
 	
-	print_line_with_color(" is here", RED);
-	
+	//print_line_with_color(" is here", RED);
+	print_string_with_color(" is here", RED);
+
 	run_tests();
 	while(1);
 }
