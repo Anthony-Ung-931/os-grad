@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include "console.h"
+#include "portmap.h"
 
 struct character {
 	int8_t character;
@@ -27,7 +28,7 @@ void print_character(char c);
 void clear_terminal();
 void print_string(char* str);
 void print_line(char* str);
-
+static void update_cursor();
 
 void print_character(char c) {
 	print_character_with_color(c, terminal_font_color);
@@ -117,6 +118,7 @@ void print_character_with_color(char c, VGA_Color color) {
 	else if(terminal_pos >= VGA_WIDTH * VGA_HEIGHT) {
 		shift_up();
 	}
+	update_cursor();
 }
 
 void print_string_with_color(char* str, VGA_Color color) {
@@ -131,4 +133,12 @@ void print_string_with_color(char* str, VGA_Color color) {
 void print_line_with_color(char* str, VGA_Color color) {
 	print_string_with_color(str, color);
 	print_character('\n');
+}
+
+static void update_cursor() {
+	uint16_t cursor_pos = terminal_pos;
+	outb(0x3d4, 0x0f);
+	outb(0x3d5, (uint8_t)(cursor_pos));
+	outb(0x3d4, 0x0e);
+	outb(0x3d5, (uint8_t)(cursor_pos >> 8));
 }
