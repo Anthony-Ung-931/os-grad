@@ -1,5 +1,6 @@
 #include "console.h"
 #include "tests.h"
+#include "keyboard.h"
 
 /**
  * Flags for various internal tests
@@ -10,6 +11,16 @@ const int flag_test_preliminary_colors = 0;
 void run_tests();
 
 int main() {
+	
+	clear_terminal();
+	uint8_t byte;
+	while(1) {
+		while(byte = scan()) {
+			print_character(charmap[byte]);
+		}
+	}
+
+	/*
 	clear_terminal();
 
 	char* str1= " HELLO ";
@@ -65,6 +76,7 @@ int main() {
 	print_string_with_color(" BIG STRING", CYAN);
 	print_line_with_color("A new line", BROWN);
 	print_line_with_color(" is here", RED);
+	*/
 
 	run_tests();
 	while(1);
