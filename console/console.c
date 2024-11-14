@@ -43,6 +43,7 @@ void clear_terminal() {
 		pos->character = DEFAULT_CHARACTER;
 		pos->style = DEFAULT_STYLE;
 	}
+	update_cursor();
 }
 
 /**
