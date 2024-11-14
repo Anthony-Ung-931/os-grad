@@ -96,16 +96,34 @@ void set_terminal_background_color(VGA_Color color) {
 void print_character_with_color(char c, VGA_Color color) {
 	struct character* pos = (struct character*)(VGA_START + terminal_pos);
 	
-	if(c != '\n') {
+	if(c == '\n') {
+		terminal_pos /= 80;
+		terminal_pos += 1;
+		terminal_pos *= 80;
+	} 
+	else if (c == '\t') {
+		terminal_pos = ((terminal_pos >> 3) + 1) << 3;
+	}
+	else if(c == '\b') {
+		/**
+		 * I do not allow the user to go back to a previous
+		 * 	line.
+		 */
+		if(terminal_pos % 80 != 0) {
+			terminal_pos--;
+			struct character* pos = (struct character*)
+				(VGA_START + terminal_pos);
+			pos->character = DEFAULT_CHARACTER;
+			pos->style = DEFAULT_STYLE;
+			
+		}
+	}
+	else {
 		pos->character = (int8_t) c;
 		pos->style = (terminal_background_color << 4) | color;
 		terminal_pos++;
 	}
-	else if(c == '\n') {
-		terminal_pos /= 80;
-		terminal_pos += 1;
-		terminal_pos *= 80;
-	}
+	
 
 	/**
 	 *	McKee says it is OK if I am checking for out of bounds.
