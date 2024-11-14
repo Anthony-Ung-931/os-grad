@@ -1,6 +1,7 @@
 #include "console.h"
 #include "tests.h"
 #include "keyboard.h"
+#include "portmap.h"
 
 /**
  * Flags for various internal tests

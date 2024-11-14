@@ -1,4 +1,4 @@
-#include<stdint.h>
+#include <stdint.h>
 
 uint8_t scan(void) {
 	uint8_t brk;
