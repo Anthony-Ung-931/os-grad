@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include "portmap.h"
 
 uint8_t scan(void) {
 	uint8_t brk;

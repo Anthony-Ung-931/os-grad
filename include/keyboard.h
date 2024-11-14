@@ -3,7 +3,7 @@
 
 #include<stdint.h>
 
-uint8t scan(void);
+uint8_t scan(void);
 
 static const char charmap[256] =
 {0,   0x1B, '1',  '2',  '3',  '4',  '5',  '6',
