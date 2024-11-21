@@ -11,5 +11,5 @@
  *		that my print_string call would discard the const qualifier.
  * */
 
-#define CONSOLE_PROMPT "$"
+#define CONSOLE_PROMPT "$ "
 

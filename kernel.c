@@ -76,11 +76,13 @@ void clear_command_buffer() {
 
 void write_character(uint8_t c) {
 	if((buffer_pos >= 0) && (buffer_pos < (MAX_COMMAND_LENGTH - 1))) {
-		if(c != '\n') {
-			command_buffer[buffer_pos] = c;
-		}
-		else {
-			command_buffer[buffer_pos] = 0;
+		switch(c) {
+			case '\n':
+				command_buffer[buffer_pos] = 0;
+				break;
+			default:
+				command_buffer[buffer_pos] = c;
+				break;
 		}
 		buffer_pos++;
 	}
