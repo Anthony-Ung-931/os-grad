@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include "console.h"
 #include "portmap.h"
+#include "kernel_config.h"
 
 struct character {
 	int8_t character;
@@ -24,11 +25,17 @@ static VGA_Color terminal_background_color = BLACK;
 static VGA_Color default_terminal_font = GRAY;
 static VGA_Color default_terminal_background = BLACK;
 
+void print_prompt();
 void print_character(char c);
 void clear_terminal();
 void print_string(char* str);
 void print_line(char* str);
 static void update_cursor();
+void shift_up();
+
+void print_prompt() {
+	print_string(prompt);
+}
 
 void print_character(char c) {
 	print_character_with_color(c, terminal_font_color);
@@ -45,32 +52,6 @@ void clear_terminal() {
 	}
 	update_cursor();
 }
-
-/**
- * McKee says it is OK for now if I simply shift up and have the first line
- * be perminantly lost.
- */
-void shift_up() {
-	struct character* current_pos = (struct character*)(VGA_START);
-	struct character* old_pos = (struct character*)(VGA_START);
-
-	int i = 0;
-	for(; i < VGA_WIDTH * (VGA_HEIGHT - 1); i++) {
-		current_pos = (struct character*)(VGA_START+i);
-		old_pos = (struct character*)(VGA_START+VGA_WIDTH+i);
-
-		current_pos->character = old_pos->character;
-		current_pos->style = old_pos->style;
-	}
-	for(; i < VGA_WIDTH * VGA_HEIGHT; i++) {
-		current_pos = (struct character*)(VGA_START+i);
-		current_pos->character = DEFAULT_CHARACTER;
-		current_pos->style = DEFAULT_STYLE;
-	}
-
-	terminal_pos = VGA_WIDTH * (VGA_HEIGHT - 1);
-}
-
 
 void print_string(char* str) {
 	int i = 0;
@@ -153,6 +134,32 @@ void print_line_with_color(char* str, VGA_Color color) {
 	print_string_with_color(str, color);
 	print_character('\n');
 }
+
+/**
+ * McKee says it is OK for now if I simply shift up and have the first line
+ * be perminantly lost.
+ */
+void shift_up() {
+	struct character* current_pos = (struct character*)(VGA_START);
+	struct character* old_pos = (struct character*)(VGA_START);
+
+	int i = 0;
+	for(; i < VGA_WIDTH * (VGA_HEIGHT - 1); i++) {
+		current_pos = (struct character*)(VGA_START+i);
+		old_pos = (struct character*)(VGA_START+VGA_WIDTH+i);
+
+		current_pos->character = old_pos->character;
+		current_pos->style = old_pos->style;
+	}
+	for(; i < VGA_WIDTH * VGA_HEIGHT; i++) {
+		current_pos = (struct character*)(VGA_START+i);
+		current_pos->character = DEFAULT_CHARACTER;
+		current_pos->style = DEFAULT_STYLE;
+	}
+
+	terminal_pos = VGA_WIDTH * (VGA_HEIGHT - 1);
+}
+
 
 static void update_cursor() {
 	uint16_t cursor_pos = terminal_pos;

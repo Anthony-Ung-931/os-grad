@@ -10,14 +10,23 @@ const int flag_test_print_overflow = 0;
 const int flag_test_preliminary_colors = 0;
 
 void run_tests();
+char* read_command();
 
 int main() {
 	
 	clear_terminal();
 	uint8_t byte;
 	while(1) {
-		while(byte = scan()) {
-			print_character(charmap[byte]);
+		print_prompt();
+		
+		uint8_t done = 0;
+		while(!done) {
+			while(byte = scan()) {
+				print_character(charmap[byte]);
+				if(charmap[byte] == '\n') {
+					done = 1;
+				}		
+			}
 		}
 	}
 
@@ -89,5 +98,17 @@ void run_tests() {
 	}
 	else if(flag_test_preliminary_colors != 0) {
 		test_preliminary_colors();
+	}
+}
+
+char* read_command() {
+	char* command = (char*)0;
+	uint8_t byte = 0;
+	while(byte = scan()) {
+		print_character(charmap[byte]);
+		if(byte == '\n') {
+			print_character('*');
+			return command;
+		}		
 	}
 }

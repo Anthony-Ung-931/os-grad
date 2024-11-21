@@ -18,6 +18,7 @@ typedef enum {
 	WHITE
 } VGA_Color;
 
+void print_prompt();
 void clear_terminal();
 void print_character(char c);
 void print_string(char* str);
