@@ -91,7 +91,7 @@ void print_character_with_color(char c, VGA_Color color) {
 		 * I do not allow the user to go back to a previous
 		 * 	line.
 		 */
-		if(terminal_pos % 80 != 0) {
+		if(terminal_pos % 80 > 2) {
 			terminal_pos--;
 			struct character* pos = (struct character*)
 				(VGA_START + terminal_pos);
