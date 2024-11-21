@@ -25,6 +25,7 @@ static VGA_Color terminal_background_color = BLACK;
 static VGA_Color default_terminal_font = GRAY;
 static VGA_Color default_terminal_background = BLACK;
 
+
 void print_prompt();
 void print_character(char c);
 void clear_terminal();
@@ -34,7 +35,7 @@ static void update_cursor();
 void shift_up();
 
 void print_prompt() {
-	print_string(prompt);
+	print_string(CONSOLE_PROMPT);
 }
 
 void print_character(char c) {

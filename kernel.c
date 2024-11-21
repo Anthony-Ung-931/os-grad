@@ -2,6 +2,7 @@
 #include "tests.h"
 #include "keyboard.h"
 #include "portmap.h"
+#include "kernel_config.h"
 
 /**
  * Flags for various internal tests
@@ -16,8 +17,7 @@ char* read_command();
 void clear_command_buffer();
 
 /* Max command size, including the null byte */
-#define MAX_COMMAND_SIZE 64
-uint8_t command_buffer[MAX_COMMAND_SIZE];
+uint8_t command_buffer[MAX_COMMAND_LENGTH];
 uint8_t buffer_pos = 0;
 
 int main() {
@@ -68,14 +68,14 @@ char* read_command() {
 }
 
 void clear_command_buffer() {
-	for(int i = 0; i < MAX_COMMAND_SIZE; i++) {
+	for(int i = 0; i < MAX_COMMAND_LENGTH; i++) {
 		command_buffer[i] = 0;
 	}
 	buffer_pos = 0;
 }
 
 void write_character(uint8_t c) {
-	if((buffer_pos >= 0) && (buffer_pos < (MAX_COMMAND_SIZE - 1))) {
+	if((buffer_pos >= 0) && (buffer_pos < (MAX_COMMAND_LENGTH - 1))) {
 		if(c != '\n') {
 			command_buffer[buffer_pos] = c;
 		}
