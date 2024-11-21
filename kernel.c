@@ -10,83 +10,37 @@ const int flag_test_print_overflow = 0;
 const int flag_test_preliminary_colors = 0;
 
 void run_tests();
+
+void write_character(uint8_t c);
 char* read_command();
+void clear_command_buffer();
+
+/* Max command size, including the null byte */
+#define MAX_COMMAND_SIZE 64
+uint8_t command_buffer[MAX_COMMAND_SIZE];
+uint8_t buffer_pos = 0;
 
 int main() {
 	
 	clear_terminal();
 	uint8_t byte;
 	while(1) {
+		clear_command_buffer();
 		print_prompt();
 		
 		uint8_t done = 0;
+		/* I cannot recreate this behavior inside a method. */
 		while(!done) {
 			while(byte = scan()) {
 				print_character(charmap[byte]);
+				write_character(charmap[byte]);
 				if(charmap[byte] == '\n') {
 					done = 1;
 				}		
 			}
 		}
+		print_line(command_buffer);
 	}
-
-	/*
-	clear_terminal();
-
-	char* str1= " HELLO ";
-	char* str2 = " WORLD ";
-	char* str3 = " TODAY ";
-	
-	print_line(str1);
-	set_terminal_font_color(BLUE);
-	print_line(str2);
-	set_terminal_font_color(YELLOW);
-	print_line(str3);
-	print_character_with_color('A', GREEN);
-	print_string_with_color(" BIG STRING", CYAN);
-	print_line_with_color("A new line", BROWN);
-	print_line_with_color(" is here", RED);
-
-	print_line(str1);
-	set_terminal_font_color(BLUE);
-	print_line(str2);
-	set_terminal_font_color(YELLOW);
-	print_line(str3);
-	print_character_with_color('A', GREEN);
-	print_string_with_color(" BIG STRING", CYAN);
-	print_line_with_color("A new line", BROWN);
-	print_line_with_color(" is here", RED);
-	
-	print_line(str1);
-	set_terminal_font_color(BLUE);
-	print_line(str2);
-	set_terminal_font_color(YELLOW);
-	print_line(str3);
-	print_character_with_color('A', GREEN);
-	print_string_with_color(" BIG STRING", CYAN);
-	print_line_with_color("A new line", BROWN);
-	print_line_with_color(" is here", RED);
-
-	print_line(str1);
-	set_terminal_font_color(BLUE);
-	print_line(str2);
-	set_terminal_font_color(YELLOW);
-	print_line(str3);
-	print_character_with_color('A', GREEN);
-	print_string_with_color(" BIG STRING", CYAN);
-	print_line_with_color("A new line", BROWN);
-	print_line_with_color(" is here", RED);
-	
-	print_line(str1);
-	set_terminal_font_color(BLUE);
-	print_line(str2);
-	set_terminal_font_color(YELLOW);
-	print_line(str3);
-	print_character_with_color('A', GREEN);
-	print_string_with_color(" BIG STRING", CYAN);
-	print_line_with_color("A new line", BROWN);
-	print_line_with_color(" is here", RED);
-	*/
 
 	run_tests();
 	while(1);
@@ -110,5 +64,24 @@ char* read_command() {
 			print_character('*');
 			return command;
 		}		
+	}
+}
+
+void clear_command_buffer() {
+	for(int i = 0; i < MAX_COMMAND_SIZE; i++) {
+		command_buffer[i] = 0;
+	}
+	buffer_pos = 0;
+}
+
+void write_character(uint8_t c) {
+	if((buffer_pos >= 0) && (buffer_pos < (MAX_COMMAND_SIZE - 1))) {
+		if(c != '\n') {
+			command_buffer[buffer_pos] = c;
+		}
+		else {
+			command_buffer[buffer_pos] = 0;
+		}
+		buffer_pos++;
 	}
 }
