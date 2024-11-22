@@ -3,6 +3,7 @@
 #include "keyboard.h"
 #include "portmap.h"
 #include "kernel_config.h"
+#include "commands.h"
 
 /**
  * Flags for various internal tests
@@ -40,6 +41,7 @@ int main() {
 			}
 		}
 		print_line(command_buffer);
+		eval_command(command_buffer);
 	}
 
 	run_tests();
