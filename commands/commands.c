@@ -27,7 +27,10 @@ void eval_command(char* command) {
 	parsed_command = trim(command);
 	print_line(parsed_command);
 	
-	populate_tokens();
+	/**
+	 * This call is commented out because it does not work.
+	 */
+	// populate_tokens();
 
 	int i = 0;
 	while(tokens[i] != 0) {
@@ -49,6 +52,10 @@ void clear_tokens() {
 	}
 }
 
+
+/**
+ * This function as written now returns addresses to two empty strings.
+ */
 void populate_tokens() {
 	int i = 0;
 	char* current_char = parsed_command;
