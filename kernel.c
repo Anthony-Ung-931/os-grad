@@ -83,7 +83,7 @@ void clear_command_buffer() {
 }
 
 void write_character(uint8_t c) {
-	if((buffer_pos >= 0) && (buffer_pos < (MAX_COMMAND_LENGTH - 1))) {
+	if((buffer_pos >= 0) && (buffer_pos < (MAX_COMMAND_LENGTH - 2))) {
 		switch(c) {
 			case '\n':
 				command_buffer[buffer_pos] = 0;
