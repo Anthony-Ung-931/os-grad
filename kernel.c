@@ -4,6 +4,7 @@
 #include "portmap.h"
 #include "kernel_config.h"
 #include "commands.h"
+#include "dios_strings.h"
 
 /**
  * Flags for various internal tests
@@ -40,7 +41,12 @@ int main() {
 				}		
 			}
 		}
-		print_line(command_buffer);
+		/**
+		 * The exit command is special.
+		 */
+		if(strcmp(command_buffer, "exit") == 0) {
+			return 0;
+		}
 		eval_command(command_buffer);
 	}
 
