@@ -80,6 +80,11 @@ void write_character(uint8_t c) {
 			case '\n':
 				command_buffer[buffer_pos] = 0;
 				break;
+			case '\b':
+				command_buffer[buffer_pos] = 0;
+				buffer_pos--;
+				command_buffer[buffer_pos] = 0;
+				break;
 			default:
 				command_buffer[buffer_pos] = c;
 				break;
@@ -87,3 +92,24 @@ void write_character(uint8_t c) {
 		buffer_pos++;
 	}
 }
+
+/**
+else if (c == '\t') {
+		terminal_pos = ((terminal_pos >> 3) + 1) << 3;
+	}
+	else if(c == '\b') {
+		if(terminal_pos % 80 != 0) {
+			terminal_pos--;
+			struct character* pos = (struct character*)
+				(VGA_START + terminal_pos);
+			pos->character = DEFAULT_CHARACTER;
+			pos->style = DEFAULT_STYLE;
+			
+		}
+	}
+	else {
+		pos->character = (int8_t) c;
+		pos->style = (terminal_background_color << 4) | color;
+		terminal_pos++;
+	}
+*/
