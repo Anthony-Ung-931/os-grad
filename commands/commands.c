@@ -51,23 +51,20 @@ void clear_tokens() {
 
 void populate_tokens() {
 	int i = 0;
-	uint8_t double_null = 0;
 	char* current_char = parsed_command;
-	char* next_char = parsed_command + 1;
 
 	/**
 	 * The command buffer will always contain two null_bytes at the end.
 	 */
-	while(i < 2 && !double_null) {
+	while(i < 2) {
 		tokens[i] = current_char;
-		while(!is_space(current_char) && (*current_char != '\0')) {
-			current_char++;
-			next_char++;
-		}
+		while(*current_char != '\0') {
+			while(!is_space(current_char)) {
+				current_char++;
+			}
 
-		*current_char = '\0';
-		if(*next_char == '\0') {
-			double_null = 1;
+			*current_char = '\0';
+			current_char++;
 		}
 		i++;
 	}
