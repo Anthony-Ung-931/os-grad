@@ -81,15 +81,16 @@ void write_character(uint8_t c) {
 				command_buffer[buffer_pos] = 0;
 				break;
 			case '\b':
-				command_buffer[buffer_pos] = 0;
-				buffer_pos--;
-				command_buffer[buffer_pos] = 0;
+				if(buffer_pos > 0) {
+					buffer_pos--;
+					command_buffer[buffer_pos] = 0;
+				}
 				break;
 			default:
 				command_buffer[buffer_pos] = c;
+				buffer_pos++;
 				break;
 		}
-		buffer_pos++;
 	}
 }
 
