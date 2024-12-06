@@ -22,7 +22,7 @@ void run_tests() {
 	}
 	else if(flag_test_preliminary_colors != 0) {
 		test_preliminary_colors();
-	} else if(p8_flag) {
+	} else if(p8_flag != 0) {
 		char* str1= " HELLO ";
 		char* str2 = " WORLD ";
 		char* str3 = " TODAY ";
