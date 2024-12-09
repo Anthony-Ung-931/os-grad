@@ -2,7 +2,7 @@
  * 	This code was provided by Prof. McKee on Canvas
  */
 
-int strlen(char* s);
+int str_len(char* s);
 
 /* BEGIN */
 int is_space(char c) {
@@ -15,7 +15,7 @@ char *ltrim(char *s) {
 }
 
 char *rtrim(char *s) {
-	char* back = s + strlen(s);
+	char* back = s + str_len(s);
 	while (is_space(*--back));
 	*(back + 1) = '\0';
 	return s;
@@ -35,7 +35,7 @@ int strcmp(const char* s1, const char* s2) {
 
 /* END */
 
-int strlen(char* s) {
+int str_len(char* s) {
 	int i = 0;
 	while(s[i] != 0) {
 		i++;

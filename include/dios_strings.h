@@ -8,3 +8,4 @@ char *trim(char *s);
 
 int strcmp(const char* s1, const char* s2);
 
+int str_len(char *s);

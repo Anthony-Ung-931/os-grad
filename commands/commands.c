@@ -4,6 +4,8 @@
 #include <stdint.h>
 
 const char* HELP = "help";
+const char* SET_TEXT_COLOR = "set-text-color";
+const char* SET_FONT_COLOR = "set-font-color";
 char* parsed_command;
 
 /**
@@ -23,14 +25,8 @@ void populate_tokens();
  */
 void eval_command(char* command) {
 	clear_tokens();
-
-	parsed_command = trim(command);
-	print_line(parsed_command);
 	
-	/**
-	 * This call is commented out because it does not work.
-	 */
-	// populate_tokens();
+	populate_tokens(command);
 
 	int i = 0;
 	while(tokens[i] != 0) {
@@ -56,30 +52,52 @@ void clear_tokens() {
 /**
  * This function as written now returns addresses to two empty strings.
  */
-void populate_tokens() {
+void populate_tokens(char* command) {
+	parsed_command = trim(command);
+	print_line(parsed_command);
+	
+	int num_tokens = 1;
+	int len = str_len(parsed_command);
+	int token_start = 0;
+
 	int i = 0;
-	char* current_char = parsed_command;
+
+	tokens[0] = parsed_command;
 
 	/**
 	 * The command buffer will always contain two null_bytes at the end.
 	 */
-	while(i < 2) {
-		tokens[i] = current_char;
-		while(*current_char != '\0') {
-			while(!is_space(current_char)) {
-				current_char++;
-			}
-
-			*current_char = '\0';
-			current_char++;
+	while((i < len) && (num_tokens <= 2) && (parsed_command[i] != '\0')) {
+		
+		/* Handles more than one whitespace between args. */
+		while(is_space(parsed_command[i])) {
+			i++;
 		}
-		i++;
+
+		token_start = i;
+		while((i < len) && (parsed_command[i] != '\0') && 
+			(!is_space(parsed_command[i]))) {
+			
+			i++;
+		}
+
+		if(token_start < i) {
+			parsed_command[i] = '\0';
+			i++;
+
+			tokens[(num_tokens - 1)] = &parsed_command[token_start];
+			num_tokens++;
+		}
+
 	}
 
 }
 
 void help() {
 	print_line("List of Commands");
+	print_line("	help");
+	print_line("	set-text-color [color: num]");
+	print_line("	set-font-color [color: num]");
 	print_line("    exit");
 }
 
