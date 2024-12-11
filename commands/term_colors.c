@@ -39,16 +39,22 @@ void set_text_color(char** args) {
 	int color = find_color(args[1]);
 
 	if(color != -1) {
-		set_terminal_font_color((VGA_Color)(color));
+		int status = set_terminal_font_color((VGA_Color)(color));
+		if(!status) {
+			print_line("ERROR! You cannot set the font color to the same as the background color.");
+		}
+		return;
 	}
 
 	else if(strcmp(args[1], LIST) == 0) {
 		list();
+		return;
 	}
 
 	else {
 		print_line("Please format your argument properly.");
 		print_line("call $ set-text-color list to see a list of colors");
+		return;
 	}
 }
 

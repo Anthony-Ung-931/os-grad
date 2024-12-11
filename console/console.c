@@ -68,12 +68,24 @@ void print_line(char* str) {
 	print_character('\n');
 }
 
-void set_terminal_font_color(VGA_Color color) {
-	terminal_font_color = color;
+int set_terminal_font_color(VGA_Color color) {
+	if(terminal_background_color != color) {
+		terminal_font_color = color;
+		return 1;
+	}
+	else {
+		return 0;
+	}
 }
 
-void set_terminal_background_color(VGA_Color color) {
-	terminal_background_color = color;
+int set_terminal_background_color(VGA_Color color) {
+	if(terminal_font_color != color) {
+		terminal_background_color = color;
+		return 1;
+	}
+	else {
+		return 0;
+	}
 }
 
 void print_character_with_color(char c, VGA_Color color) {
@@ -92,7 +104,7 @@ void print_character_with_color(char c, VGA_Color color) {
 		 * I do not allow the user to go back to a previous
 		 * 	line.
 		 */
-		if(terminal_pos % 80 != 0) {
+		if(terminal_pos % 80 > 2) {
 			terminal_pos--;
 			struct character* pos = (struct character*)
 				(VGA_START + terminal_pos);
