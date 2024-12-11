@@ -37,7 +37,7 @@ void eval_command(char* command) {
 		set_text_color(tokens);
 	}
 	else if(strcmp(tokens[0], SET_BG_COLOR) == 0) {
-		print_line("set_font_color called");
+		set_text_background_color(tokens);
 	}
 	else if(strcmp(tokens[0], CLEAR) == 0) {
 		clear_terminal();
