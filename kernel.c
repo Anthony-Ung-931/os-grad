@@ -45,6 +45,8 @@ int main() {
 		 * The exit command is special.
 		 */
 		if(strcmp(command_buffer, "exit") == 0) {
+			clear_terminal();
+			print_line("Goodbye!");
 			return 0;
 		}
 		eval_command(command_buffer);

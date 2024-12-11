@@ -51,6 +51,7 @@ void clear_terminal() {
 		pos->character = DEFAULT_CHARACTER;
 		pos->style = DEFAULT_STYLE;
 	}
+	terminal_pos = 0;
 	update_cursor();
 }
 

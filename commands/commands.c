@@ -1,11 +1,14 @@
 #include "console.h"
 #include "dios_strings.h"
+#include "term_colors.h"
 
 #include <stdint.h>
 
 const char* HELP = "help";
 const char* SET_TEXT_COLOR = "set-text-color";
 const char* SET_FONT_COLOR = "set-font-color";
+const char* CLEAR = "clear";
+
 char* parsed_command;
 
 /**
@@ -25,17 +28,19 @@ void populate_tokens();
  */
 void eval_command(char* command) {
 	clear_tokens();
-	
 	populate_tokens(command);
 
-	int i = 0;
-	while(tokens[i] != 0) {
-		print_line(tokens[i]);
-		i++;
-	}
-
-	if(strcmp(parsed_command, HELP) == 0) {
+	if(strcmp(tokens[0], HELP) == 0) {
 		help();	
+	}
+	else if(strcmp(tokens[0], SET_TEXT_COLOR) == 0) {
+		set_text_color(tokens);
+	}
+	else if(strcmp(tokens[0], SET_FONT_COLOR) == 0) {
+		print_line("set_font_color called");
+	}
+	else if(strcmp(tokens[0], CLEAR) == 0) {
+		clear_terminal();
 	}
 	else {
 		bad_command();
@@ -95,9 +100,10 @@ void populate_tokens(char* command) {
 
 void help() {
 	print_line("List of Commands");
-	print_line("	help");
-	print_line("	set-text-color [color: num]");
-	print_line("	set-font-color [color: num]");
+	print_line("    help");
+	print_line("    set-text-color [color: num]");
+	print_line("    set-font-color [color: num]");
+	print_line("    clear");
 	print_line("    exit");
 }
 
