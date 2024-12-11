@@ -59,7 +59,6 @@ void clear_tokens() {
  */
 void populate_tokens(char* command) {
 	parsed_command = trim(command);
-	print_line(parsed_command);
 	
 	int num_tokens = 1;
 	int len = str_len(parsed_command);
@@ -101,8 +100,8 @@ void populate_tokens(char* command) {
 void help() {
 	print_line("List of Commands");
 	print_line("    help");
-	print_line("    set-text-color [color: num]");
-	print_line("    set-font-color [color: num]");
+	print_line("    set-text-color [color: str]");
+	print_line("    set-font-color [color: str]");
 	print_line("    clear");
 	print_line("    exit");
 }
